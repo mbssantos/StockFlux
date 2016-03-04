@@ -12,15 +12,16 @@
                     i,
                     max;
 
+                var hideWindow = () => fin.desktop.Window.getCurrent().hide();
                 if (length !== 0) {
                     // Restoring previously open windows
                     for (i = 0; i < length; i++) {
                         var name = previousWindows[i];
-                        windowCreationService.createMainWindow(name, storeService.open(name).isCompact());
+                        windowCreationService.createMainWindow(name, storeService.open(name).isCompact(), hideWindow);
                     }
                 } else {
                     // Creating new window
-                    windowCreationService.createMainWindow();
+                    windowCreationService.createMainWindow(undefined, undefined, hideWindow);
                 }
 
                 $scope.$on('updateFavourites', (event, stock, windowName) => {

@@ -3,12 +3,19 @@
     "startup_app": {
         "name": "StockFlux",
         "uuid": "StockFlux",
-        "maxWidth": 0,
-        "maxHeight": 0,
-        "defaultWidth": 0,
-        "defaultHeight": 0,
+        "alwaysOnTop": true,
+        "defaultCentered": true,
+        "maxWidth": 255,
+        "maxHeight": 255,
+        "defaultWidth": 255,
+        "defaultHeight": 255,
         "frame": false,
         "showTaskbarIcon": false,
+        "autoShow": true,
+        "cornerRounding": {
+            "width": 125,
+            "height": 125
+        },
         "url": "http://scottlogic.github.io/StockFlux/parent.html",
         "applicationIcon": "http://scottlogic.github.io/StockFlux/favicon.ico"
     },
