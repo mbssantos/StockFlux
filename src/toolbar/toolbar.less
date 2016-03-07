@@ -1,13 +1,9 @@
 ﻿#toolbar {
   height: @toolbar-height;
-  right: 165px;
+  right: 0px;
   left: @sidebar-width;
   position: absolute;
-
-  .drag {
-    .drag;
-    height: 100%;
-  }
+  .drag;
 
   img {
     vertical-align: initial;
@@ -19,10 +15,12 @@
   }
 
   .maximise-button, .compact-button, .normal_size-button, .close-button {
+    .no-drag;
     .toolbar-offset-top();
   }
 
   .minimise-button {
+    .no-drag;
     .toolbar-offset-top(10px);
   }
 
