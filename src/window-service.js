@@ -134,7 +134,8 @@
      * Class that creates and governs OpenFin windows.
      */
     class WindowCreationService {
-        constructor(storeService, geometryService, $q, configService) {
+        constructor($rootScope, storeService, geometryService, $q, configService) {
+            this.$rootScope = $rootScope;
             this.storeService = storeService;
             this.geometryService = geometryService;
             this.$q = $q;
@@ -190,6 +191,7 @@
             var closedEvent = (e) => {
                 this.windowTracker.dispose(mainWindow, () => {
                     this.storeService.open(mainWindow.name).closeWindow();
+                    this.$rootScope.$broadcast('closedWindow');
                     mainWindow.removeEventListener('closed', closedEvent);
                 });
             };
@@ -279,8 +281,12 @@
             fin.desktop.main(cb);
         }
 
+        getMainWindows() {
+            return this.windowTracker.getMainWindows();
+        }
+
         getWindow(name) {
-            return this.windowTracker.getMainWindows().filter((w) => w.name === name)[0];
+            return this.getMainWindows().filter((w) => w.name === name)[0];
         }
 
         registerDrag(tearoutWindow, openFinWindow) {
@@ -293,7 +299,7 @@
                 openFinWindow);
         }
     }
-    WindowCreationService.$inject = ['storeService', 'geometryService', '$q', 'configService'];
+    WindowCreationService.$inject = ['$rootScope', 'storeService', 'geometryService', '$q', 'configService'];
 
     angular.module('stockflux.window')
         .service('windowCreationService', WindowCreationService);

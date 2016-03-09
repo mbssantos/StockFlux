@@ -29,6 +29,13 @@
                     var openWindow = windowCreationService.getWindow(windowName);
                     openWindow.getNativeWindow().dispatchEvent(e);
                 });
+
+                $scope.$on('closedWindow', () => {
+                    var e = new Event('closedWindow');
+                    windowCreationService.getMainWindows().forEach((mw) => {
+                        mw.getNativeWindow().dispatchEvent(e);
+                    });
+                });
             });
         }
     }

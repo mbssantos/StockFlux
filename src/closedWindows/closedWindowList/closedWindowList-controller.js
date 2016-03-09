@@ -1,14 +1,25 @@
 (function() {
     'use strict';
 
+    const recentlyClosedWindowIcon = 'closed_tabs_active';
+
     class ClosedWindowListCtrl {
         constructor($scope, $timeout) {
             this.$scope = $scope;
             this.$timeout = $timeout;
             this.closedWindows = [];
             this.closedTabsShow = false;
+            this.overriddenIcon = '';
 
             this._watch();
+        }
+
+        name() {
+            return this.$scope.icon;
+        }
+
+        override() {
+            return this.overriddenIcon;
         }
 
         refreshClosedWindows() {
@@ -16,6 +27,7 @@
         }
 
         click() {
+            this.overriddenIcon = '';
             this.refreshClosedWindows();
             this.closedTabsShow = this.closedWindows.length > 0;
         }
@@ -38,6 +50,10 @@
 
             this.$scope.$on('$destroy', () => {
                 window.storeService.removeClosedWindowListener(listener);
+            });
+
+            this.$scope.$on('closedWindow', () => {
+                this.overriddenIcon = recentlyClosedWindowIcon;
             });
         }
     }
