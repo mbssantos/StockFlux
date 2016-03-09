@@ -29,6 +29,10 @@
                 $rootScope.$broadcast('closedWindow');
             });
 
+            window.addEventListener('closedWindowListOpened', () => {
+                $rootScope.$broadcast('closedWindowListOpened');
+            });
+
             return {
                 getCurrentWindow: getCurrentWindow,
                 openUrlWithBrowser: openUrlWithBrowser,

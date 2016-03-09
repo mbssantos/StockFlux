@@ -27,7 +27,9 @@
         }
 
         click() {
-            this.overriddenIcon = '';
+            // Send an event back to the parent
+
+
             this.refreshClosedWindows();
             this.closedTabsShow = this.closedWindows.length > 0;
         }
@@ -52,8 +54,12 @@
                 window.storeService.removeClosedWindowListener(listener);
             });
 
-            this.$scope.$on('closedWindow', () => {
+            this.$scope.$on('windowClosed', () => {
                 this.overriddenIcon = recentlyClosedWindowIcon;
+            });
+
+            this.$scope.$on('closedWindowListOpened', () => {
+                this.overriddenIcon = '';
             });
         }
     }

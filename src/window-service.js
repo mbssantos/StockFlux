@@ -191,7 +191,7 @@
             var closedEvent = (e) => {
                 this.windowTracker.dispose(mainWindow, () => {
                     this.storeService.open(mainWindow.name).closeWindow();
-                    this.$rootScope.$broadcast('closedWindow');
+                    this.$rootScope.$broadcast('windowClosed');
                     mainWindow.removeEventListener('closed', closedEvent);
                 });
             };

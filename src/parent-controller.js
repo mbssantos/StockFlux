@@ -30,8 +30,15 @@
                     openWindow.getNativeWindow().dispatchEvent(e);
                 });
 
-                $scope.$on('closedWindow', () => {
-                    var e = new Event('closedWindow');
+                $scope.$on('windowClosed', () => {
+                    var e = new Event('windowClosed');
+                    windowCreationService.getMainWindows().forEach((mw) => {
+                        mw.getNativeWindow().dispatchEvent(e);
+                    });
+                });
+
+                $scope.$on('closedWindowListOpened', () => {
+                    var e = new Event('closedWindowListOpened');
                     windowCreationService.getMainWindows().forEach((mw) => {
                         mw.getNativeWindow().dispatchEvent(e);
                     });
