@@ -6,6 +6,16 @@ module.exports = function(grunt) {
         version = grunt.file.readJSON('package.json').version,
         type = grunt.file.readJSON('package.json').type;
 
+    target = 'http://localhost:8080/webpack-dev-server/public';
+    var appJson = 'http://localhost:8080/public/app.json';
+
+        console.log('target ::: ' + target);
+            console.log('parent.html ::: ' + target + '/parent.html');
+
+    console.log('appJson ::: ' + appJson);
+    console.log('port ::: ' + port);
+
+
     grunt.initConfig({
         'gh-pages': {
             origin: {
@@ -42,7 +52,7 @@ module.exports = function(grunt) {
 
         openfin: {
             options: {
-                configPath: target + '/app.json',
+                configPath: appJson, // + '/app.json',
                 config: {
                     create: false,
                     filePath: 'public/app.json',

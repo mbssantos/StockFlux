@@ -26,7 +26,7 @@
                 frame: false,
                 showTaskbarIcon: true,
                 saveWindowState: true,
-                url: 'index.html',
+                url: '/webpack-dev-server/public/index.html',
                 resizable: true,
                 maximizable: true,
                 minWidth: 918,
@@ -54,7 +54,7 @@
                 frame: false,
                 showTaskbarIcon: true,
                 saveWindowState: true,
-                url: 'index.html',
+                url: '/webpack-dev-server/public/index.html',
                 resizable: false,
                 maximizable: false,
                 minWidth: 230,
@@ -79,7 +79,7 @@
                 saveWindowState: false,
                 maxWidth: 230,
                 maxHeight: 100,
-                url: 'tearout.html',
+                url: '/webpack-dev-server/public/tearout.html',
                 shadow: true
             };
         }
