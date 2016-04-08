@@ -348,9 +348,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: '_fillPool',
             value: function _fillPool() {
                 var deferred = this.$q.defer();
-                this.pool.push({
-                    promise: deferred.promise,
-                    window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
+                this.pool.push({ promise: deferred.promise, window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
                         deferred.resolve();
                     })
                 });
@@ -639,30 +637,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _this6 = this;
 
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    window.setTimeout(function () {
-                        var nativeWindow = newWindow.getNativeWindow();
-                        nativeWindow.windowService = _this6;
-                        nativeWindow.storeService = _this6.storeService;
-                        nativeWindow.dispatchEvent(new Event('onStoreServiceReady'));
+                    var nativeWindow = newWindow.getNativeWindow();
+                    nativeWindow.windowService = _this6;
+                    nativeWindow.storeService = _this6.storeService;
+                    nativeWindow.dispatchEvent(new Event('onStoreServiceReady'));
 
-                        _this6.windowTracker.add(newWindow);
+                    _this6.windowTracker.add(newWindow);
 
-                        var showFunction = function showFunction() {
-                            _this6.$timeout(function () {
-                                newWindow.show();
-                                newWindow.bringToFront();
-                            });
-                        };
+                    var showFunction = function showFunction() {
+                        _this6.$timeout(function () {
+                            newWindow.show();
+                            newWindow.bringToFront();
+                        });
+                    };
 
-                        if (successCb) {
-                            //Showing of the window happens after the callback is executed.
-                            successCb(newWindow, showFunction);
-                        } else {
-                            showFunction();
-                        }
+                    if (successCb) {
+                        //Showing of the window happens after the callback is executed.
+                        successCb(newWindow, showFunction);
+                    } else {
+                        showFunction();
+                    }
 
-                        _this6.snapToScreenBounds(newWindow);
-                    }, 5000);
+                    _this6.snapToScreenBounds(newWindow);
                 };
 
                 var mainWindow;
