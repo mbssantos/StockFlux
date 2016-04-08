@@ -642,33 +642,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    window.setTimeout(function () {
-                        console.log("windowCreatedCb called, running timeout", new Date().getTime());
+                    // console.log("windowCreatedCb called");
+                    newWindow.getNativeWindow().windowService = that;
+                    newWindow.getNativeWindow().storeService = that.storeService;
+                    newWindow.getNativeWindow().storeService_pos = new Date().getTime();
 
-                        // console.log("windowCreatedCb called");
-                        newWindow.getNativeWindow().windowService = that;
-                        newWindow.getNativeWindow().storeService = that.storeService;
-                        newWindow.getNativeWindow().storeService_pos = new Date().getTime();
-                        that.windowTracker.add(newWindow);
-                        console.log('that.registry["cacheReady"] ::: ', that.registry["cacheReady"]);
-                        notify(that.registry["cacheReady"]);
+                    that.windowTracker.add(newWindow);
+                    var showFunction = function showFunction() {
+                        that.$timeout(function () {
+                            newWindow.show();
+                            newWindow.bringToFront();
+                        });
+                    };
 
-                        var showFunction = function showFunction() {
-                            that.$timeout(function () {
-                                newWindow.show();
-                                newWindow.bringToFront();
-                            });
-                        };
-
-                        if (successCb) {
-                            //Showing of the window happens after the callback is executed.
-                            successCb(newWindow, showFunction);
-                        } else {
-                            showFunction();
-                        }
-
-                        that.snapToScreenBounds(newWindow);
-                    }, 400);
+                    if (successCb) {
+                        //Showing of the window happens after the callback is executed.
+                        successCb(newWindow, showFunction);
+                    } else {
+                        showFunction();
+                    }
+                    that.snapToScreenBounds(newWindow);
                 };
 
                 var mainWindow;
@@ -840,15 +833,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'ready',
             value: function ready(cb) {
-                console.log("createMainWindow ready called!");
                 fin.desktop.main(cb);
-            }
-        }, {
-            key: 'onCacheReady',
-            value: function onCacheReady(cb) {
-                this.registry["cacheReady"] = this.registry["cacheReady"] || {};
-                this.cacheReadyRegistry[windId] = cb;
-                // fin.desktop.main(cb);
             }
         }, {
             key: 'getMainWindows',
@@ -871,17 +856,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         return WindowCreationService;
     }();
-
-    function notify(reg, payload) {
-        console.log("reg ::: ", reg);
-        (reg || []).forEach(function (entry) {
-            try {
-                fin.desktop.main(entry);
-            } catch (e) {
-                console.error(e);
-            }
-        });
-    };
 
     WindowCreationService.$inject = ['$rootScope', 'storeService', 'geometryService', '$q', 'configService', '$timeout'];
 
