@@ -637,36 +637,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(WindowCreationService, [{
             key: 'createMainWindow',
             value: function createMainWindow(name, isCompact, successCb) {
-                var _this6 = this;
+                var _this7 = this;
 
                 console.log("windowCreatedCb set");
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    // window.setTimeout(function() {
+                    console.log("windowCreatedCb called, seeting timeout");
+                    window.setTimeout(function () {
+                        var _this6 = this;
 
-                    // console.log("windowCreatedCb called");
-                    newWindow.getNativeWindow().windowService = _this6;
-                    newWindow.getNativeWindow().storeService_pre = new Date().getTime();
-                    newWindow.getNativeWindow().storeService = _this6.storeService;
-                    newWindow.getNativeWindow().storeService_pos = new Date().getTime();
+                        console.log("windowCreatedCb called, running timeout");
 
-                    _this6.windowTracker.add(newWindow);
+                        // console.log("windowCreatedCb called");
+                        newWindow.getNativeWindow().windowService = this;
+                        // newWindow.getNativeWindow().storeService_pre = new Date().getTime();
+                        newWindow.getNativeWindow().storeService = this.storeService;
+                        // newWindow.getNativeWindow().storeService_pos = new Date().getTime();
 
-                    var showFunction = function showFunction() {
-                        _this6.$timeout(function () {
-                            newWindow.show();
-                            newWindow.bringToFront();
-                        }, 500);
-                    };
+                        this.windowTracker.add(newWindow);
 
-                    if (successCb) {
-                        //Showing of the window happens after the callback is executed.
-                        successCb(newWindow, showFunction);
-                    } else {
-                        showFunction();
-                    }
+                        var showFunction = function showFunction() {
+                            _this6.$timeout(function () {
+                                newWindow.show();
+                                newWindow.bringToFront();
+                            }, 500);
+                        };
 
-                    _this6.snapToScreenBounds(newWindow);
-                    // }, 500);
+                        if (successCb) {
+                            //Showing of the window happens after the callback is executed.
+                            successCb(newWindow, showFunction);
+                        } else {
+                            showFunction();
+                        }
+
+                        this.snapToScreenBounds(newWindow);
+                    }, 500);
                 };
 
                 var mainWindow;
@@ -676,8 +680,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     mainWindow = new fin.desktop.Window(this.configService.getWindowConfig(name), function () {
                         if (isCompact) {
-                            var compactSize = _this6.configService.getCompactWindowDimensions();
-                            _this6.updateOptions(mainWindow, true);
+                            var compactSize = _this7.configService.getCompactWindowDimensions();
+                            _this7.updateOptions(mainWindow, true);
                             mainWindow.resizeTo(compactSize[0], compactSize[1], 'top-left');
                         }
                         windowCreatedCb(mainWindow);
@@ -697,8 +701,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 var closedEvent = function closedEvent(e) {
-                    _this6.windowTracker.dispose(mainWindow, function () {
-                        _this6.storeService.open(mainWindow.name).closeWindow();
+                    _this7.windowTracker.dispose(mainWindow, function () {
+                        _this7.storeService.open(mainWindow.name).closeWindow();
                         mainWindow.removeEventListener('closed', closedEvent);
                     });
                 };
@@ -791,10 +795,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'snapToScreenBounds',
             value: function snapToScreenBounds(targetWindow) {
-                var _this7 = this;
+                var _this8 = this;
 
                 targetWindow.getBounds(function (bounds) {
-                    _this7.getTargetMonitor(bounds.left, bounds.top, function (monitor) {
+                    _this8.getTargetMonitor(bounds.left, bounds.top, function (monitor) {
 
                         var availableRect = monitor.availableRect;
 
