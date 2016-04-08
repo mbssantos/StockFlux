@@ -639,28 +639,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function createMainWindow(name, isCompact, successCb) {
                 var _this6 = this;
 
-                console.log("windowCreatedCb set");
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    console.log("windowCreatedCb called, seeting timeout", new Date().getTime());
                     window.setTimeout(function () {
                         console.log("windowCreatedCb called, running timeout", new Date().getTime());
 
                         // console.log("windowCreatedCb called");
-                        newWindow.getNativeWindow().windowService = this;
-                        newWindow.getNativeWindow().storeService = this.storeService;
+                        newWindow.getNativeWindow().windowService = that;
+                        newWindow.getNativeWindow().storeService = that.storeService;
                         newWindow.getNativeWindow().storeService_pos = new Date().getTime();
-
-                        console.log("that ::: ", that);
-                        console.log("that.windowTracker :::", that.windowTracker);
-
                         that.windowTracker.add(newWindow);
 
                         var showFunction = function showFunction() {
                             that.$timeout(function () {
                                 newWindow.show();
                                 newWindow.bringToFront();
-                            }, 1000);
+                            });
                         };
 
                         if (successCb) {
