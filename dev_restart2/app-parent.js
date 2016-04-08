@@ -662,7 +662,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             showFunction();
                         }
                         that.snapToScreenBounds(newWindow);
-                    }, 200);
+                    }, 1000);
                 };
 
                 var mainWindow;
