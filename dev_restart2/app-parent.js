@@ -349,9 +349,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: '_fillPool',
             value: function _fillPool() {
                 var deferred = this.$q.defer();
-                this.pool.push({
-                    promise: deferred.promise,
-                    window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
+                this.pool.push({ promise: deferred.promise, window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
                         deferred.resolve();
                     })
                 });
@@ -620,7 +618,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.closedWindowsListeners = [];
             this.closedWindowSeen = true;
             this.$timeout = $timeout;
-            this.registry = {};
 
             $rootScope.$on('openWindow', function () {
                 return _this5.notifyClosedWindowListeners();
@@ -640,17 +637,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function createMainWindow(name, isCompact, successCb) {
                 var _this6 = this;
 
-                var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
                     var nativeWindow = newWindow.getNativeWindow();
-                    nativeWindow.windowService = that;
-                    nativeWindow.storeService = that.storeService;
-                    nativeWindow.storeService_pos = new Date().getTime();
+                    nativeWindow.windowService = _this6;
+                    nativeWindow.storeService = _this6.storeService;
                     nativeWindow.dispatchEvent(new Event("onStoreServiceReady"));
 
-                    that.windowTracker.add(newWindow);
+                    _this6.windowTracker.add(newWindow);
+
                     var showFunction = function showFunction() {
-                        that.$timeout(function () {
+                        _this6.$timeout(function () {
                             newWindow.show();
                             newWindow.bringToFront();
                         });
@@ -662,7 +658,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     } else {
                         showFunction();
                     }
-                    that.snapToScreenBounds(newWindow);
+
+                    _this6.snapToScreenBounds(newWindow);
                 };
 
                 var mainWindow;
