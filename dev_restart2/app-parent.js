@@ -642,7 +642,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    setTimeout(function () {
+                    window.setTimeout(function () {
                         var nativeWindow = newWindow.getNativeWindow();
                         nativeWindow.windowService = that;
                         nativeWindow.storeService = that.storeService;
@@ -664,7 +664,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             showFunction();
                         }
                         that.snapToScreenBounds(newWindow);
-                    }, 1000);
+                    }, 5000);
                 };
 
                 var mainWindow;
