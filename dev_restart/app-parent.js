@@ -640,12 +640,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _this7 = this;
 
                 console.log("windowCreatedCb set");
+                var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    console.log("windowCreatedCb called, seeting timeout");
+                    console.log("windowCreatedCb called, seeting timeout", new Date().getTime());
                     window.setTimeout(function () {
                         var _this6 = this;
 
-                        console.log("windowCreatedCb called, running timeout");
+                        console.log("windowCreatedCb called, running timeout", new Date().getTime());
 
                         // console.log("windowCreatedCb called");
                         newWindow.getNativeWindow().windowService = this;
@@ -653,7 +654,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         newWindow.getNativeWindow().storeService = this.storeService;
                         // newWindow.getNativeWindow().storeService_pos = new Date().getTime();
 
-                        this.windowTracker.add(newWindow);
+                        that.windowTracker.add(newWindow);
 
                         var showFunction = function showFunction() {
                             _this6.$timeout(function () {
@@ -669,7 +670,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             showFunction();
                         }
 
-                        this.snapToScreenBounds(newWindow);
+                        that.snapToScreenBounds(newWindow);
                     }, 500);
                 };
 
