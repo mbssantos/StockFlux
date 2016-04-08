@@ -642,9 +642,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    newWindow.getNativeWindow().windowService = that;
-                    newWindow.getNativeWindow().storeService = that.storeService;
-                    newWindow.getNativeWindow().storeService_pos = new Date().getTime();
+                    var nativeWindow = newWindow.getNativeWindow();
+                    nativeWindow.windowService = that;
+                    nativeWindow.storeService = that.storeService;
+                    nativeWindow.storeService_pos = new Date().getTime();
+                    nativeWindow.dispatchEvent(new Event("onStoreServiceReady"));
 
                     that.windowTracker.add(newWindow);
                     var showFunction = function showFunction() {
