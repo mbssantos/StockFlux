@@ -349,7 +349,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: '_fillPool',
             value: function _fillPool() {
                 var deferred = this.$q.defer();
-                this.pool.push({ promise: deferred.promise, window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
+                this.pool.push({
+                    promise: deferred.promise,
+                    window: new fin.desktop.Window(this.configService.getWindowConfig(), function () {
                         deferred.resolve();
                     })
                 });
@@ -639,7 +641,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 console.log("windowCreatedCb set");
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    console.log("windowCreatedCb called");
+                    // window.setTimeout(function() {
+
+                    // console.log("windowCreatedCb called");
                     newWindow.getNativeWindow().windowService = _this6;
                     newWindow.getNativeWindow().storeService_pre = new Date().getTime();
                     newWindow.getNativeWindow().storeService = _this6.storeService;
@@ -651,7 +655,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         _this6.$timeout(function () {
                             newWindow.show();
                             newWindow.bringToFront();
-                        });
+                        }, 500);
                     };
 
                     if (successCb) {
@@ -662,6 +666,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
 
                     _this6.snapToScreenBounds(newWindow);
+                    // }, 500);
                 };
 
                 var mainWindow;
