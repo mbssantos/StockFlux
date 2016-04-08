@@ -642,29 +642,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    window.setTimeout(function () {
-                        var nativeWindow = newWindow.getNativeWindow();
-                        nativeWindow.windowService = that;
-                        nativeWindow.storeService = that.storeService;
-                        nativeWindow.storeService_pos = new Date().getTime();
-                        nativeWindow.dispatchEvent(new Event("onStoreServiceReady"));
+                    var nativeWindow = newWindow.getNativeWindow();
+                    nativeWindow.windowService = that;
+                    nativeWindow.storeService = that.storeService;
+                    nativeWindow.storeService_pos = new Date().getTime();
+                    nativeWindow.dispatchEvent(new Event("onStoreServiceReady"));
 
-                        that.windowTracker.add(newWindow);
-                        var showFunction = function showFunction() {
-                            that.$timeout(function () {
-                                newWindow.show();
-                                newWindow.bringToFront();
-                            });
-                        };
+                    that.windowTracker.add(newWindow);
+                    var showFunction = function showFunction() {
+                        that.$timeout(function () {
+                            newWindow.show();
+                            newWindow.bringToFront();
+                        });
+                    };
 
-                        if (successCb) {
-                            //Showing of the window happens after the callback is executed.
-                            successCb(newWindow, showFunction);
-                        } else {
-                            showFunction();
-                        }
-                        that.snapToScreenBounds(newWindow);
-                    }, 5000);
+                    if (successCb) {
+                        //Showing of the window happens after the callback is executed.
+                        successCb(newWindow, showFunction);
+                    } else {
+                        showFunction();
+                    }
+                    that.snapToScreenBounds(newWindow);
                 };
 
                 var mainWindow;
