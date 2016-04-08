@@ -9,7 +9,7 @@
         "defaultHeight": 0,
         "frame": false,
         "showTaskbarIcon": false,
-        "url": "http://scottlogic.github.io/StockFlux/dev/parent.html",
+        "url": "http://mbssantos.github.io/StockFlux/dev_restart/parent.html",
         "applicationIcon": "http://scottlogic.github.io/StockFlux/dev/favicon.ico"
     },
     "runtime": {
