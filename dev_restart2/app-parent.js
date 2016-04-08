@@ -837,6 +837,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'ready',
             value: function ready(cb) {
+                console.log("createMainWindow ready called!");
+                fin.desktop.main(cb);
+            }
+        }, {
+            key: 'cacheReady',
+            value: function cacheReady(cb) {
+                console.log("createMainWindow ready called!");
                 fin.desktop.main(cb);
             }
         }, {
