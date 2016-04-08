@@ -9,8 +9,8 @@
         "defaultHeight": 0,
         "frame": false,
         "showTaskbarIcon": false,
-        "url": "http://mbssantos.github.io/StockFlux/dev_restart/parent.html",
-        "applicationIcon": "http://mbssantos.github.io/StockFlux/dev/favicon.ico"
+        "url": "http://mbssantos.github.io/StockFlux/dev_restart2/parent.html",
+        "applicationIcon": "http://mbssantos.github.io/StockFlux/dev_restart2/favicon.ico"
     },
     "runtime": {
         "arguments": "--enable-aggressive-domstorage-flushing",
@@ -19,8 +19,8 @@
     "shortcut": {
         "company": "ScottLogic",
         "description": "Hosts BitFlux as an OpenFin application.",
-        "icon": "http://mbssantos.github.io/StockFlux/dev/favicon.ico",
+        "icon": "http://mbssantos.github.io/StockFlux/dev_restart2/favicon.ico",
         "name": "StockFlux"
     },
-    "splashScreenImage": "http://mbssantos.github.io/StockFlux/dev/assets/png/splashscreen.png"
+    "splashScreenImage": "http://mbssantos.github.io/StockFlux/dev_restart2/assets/png/splashscreen.png"
 }
