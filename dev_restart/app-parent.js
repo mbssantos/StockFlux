@@ -654,6 +654,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         console.log("that ::: ", that);
                         console.log("that.windowTracker :::", that.windowTracker);
+
                         that.windowTracker.add(newWindow);
 
                         var showFunction = function showFunction() {
