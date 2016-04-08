@@ -620,6 +620,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.closedWindowsListeners = [];
             this.closedWindowSeen = true;
             this.$timeout = $timeout;
+            this.registry = {};
 
             $rootScope.$on('openWindow', function () {
                 return _this5.notifyClosedWindowListeners();
@@ -649,6 +650,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         newWindow.getNativeWindow().storeService = that.storeService;
                         newWindow.getNativeWindow().storeService_pos = new Date().getTime();
                         that.windowTracker.add(newWindow);
+                        console.log('this.registry["cacheReady"] ::: ', this.registry["cacheReady"]);
+                        notify(this.registry["cacheReady"]);
 
                         var showFunction = function showFunction() {
                             that.$timeout(function () {
@@ -841,10 +844,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 fin.desktop.main(cb);
             }
         }, {
-            key: 'cacheReady',
-            value: function cacheReady(cb) {
-                console.log("createMainWindow ready called!");
-                fin.desktop.main(cb);
+            key: 'onCacheReady',
+            value: function onCacheReady(cb) {
+                this.registry["cacheReady"] = this.registry["cacheReady"] || {};
+                this.cacheReadyRegistry[windId] = cb;
+                // fin.desktop.main(cb);
             }
         }, {
             key: 'getMainWindows',
@@ -867,6 +871,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         return WindowCreationService;
     }();
+
+    function notify(reg, payload) {
+        console.log("reg ::: ", reg);
+        (reg || []).forEach(function (entry) {
+            try {
+                fin.desktop.main(entry);
+            } catch (e) {
+                console.error(e);
+            }
+        });
+    };
 
     WindowCreationService.$inject = ['$rootScope', 'storeService', 'geometryService', '$q', 'configService', '$timeout'];
 
