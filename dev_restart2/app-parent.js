@@ -650,8 +650,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         newWindow.getNativeWindow().storeService = that.storeService;
                         newWindow.getNativeWindow().storeService_pos = new Date().getTime();
                         that.windowTracker.add(newWindow);
-                        console.log('this.registry["cacheReady"] ::: ', this.registry["cacheReady"]);
-                        notify(this.registry["cacheReady"]);
+                        console.log('that.registry["cacheReady"] ::: ', that.registry["cacheReady"]);
+                        notify(that.registry["cacheReady"]);
 
                         var showFunction = function showFunction() {
                             that.$timeout(function () {
