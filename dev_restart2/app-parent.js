@@ -642,26 +642,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var that = this;
                 var windowCreatedCb = function windowCreatedCb(newWindow) {
-                    // console.log("windowCreatedCb called");
-                    newWindow.getNativeWindow().windowService = that;
-                    newWindow.getNativeWindow().storeService = that.storeService;
-                    newWindow.getNativeWindow().storeService_pos = new Date().getTime();
+                    window.setTimeout(function () {
+                        newWindow.getNativeWindow().windowService = that;
+                        newWindow.getNativeWindow().storeService = that.storeService;
+                        newWindow.getNativeWindow().storeService_pos = new Date().getTime();
 
-                    that.windowTracker.add(newWindow);
-                    var showFunction = function showFunction() {
-                        that.$timeout(function () {
-                            newWindow.show();
-                            newWindow.bringToFront();
-                        });
-                    };
+                        that.windowTracker.add(newWindow);
+                        var showFunction = function showFunction() {
+                            that.$timeout(function () {
+                                newWindow.show();
+                                newWindow.bringToFront();
+                            });
+                        };
 
-                    if (successCb) {
-                        //Showing of the window happens after the callback is executed.
-                        successCb(newWindow, showFunction);
-                    } else {
-                        showFunction();
-                    }
-                    that.snapToScreenBounds(newWindow);
+                        if (successCb) {
+                            //Showing of the window happens after the callback is executed.
+                            successCb(newWindow, showFunction);
+                        } else {
+                            showFunction();
+                        }
+                        that.snapToScreenBounds(newWindow);
+                    }, 200);
                 };
 
                 var mainWindow;
