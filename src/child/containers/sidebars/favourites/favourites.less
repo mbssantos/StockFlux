@@ -10,6 +10,24 @@
 @fav-split-color: #323A48;
 @highlight-colour: #447272;
 @scrollbar-padding: 20px;
+.favDropTarget #favourite-scroll {
+    transition: 0.25s all;
+}
+
+.favDropTarget.dragOver #favourite-scroll {
+    background-color: #45D6BC;
+}
+
+.favouriteWrapper.dragging {
+    background-color: #2B595B;
+}
+.favouriteWrapper *{
+    transition: 0.25s all;
+}
+.favouriteWrapper.dragging * {
+    opacity: 0;
+}
+
 
 .favourites {
   float: right;
@@ -40,6 +58,14 @@
 .drop-target {
   .size(@width: @expanded-width, @height: @favourite-height);
   background-color: #2E5356;
+}
+.favouriteWrapper.dragOver {
+    border-color: #45D6BC;
+}
+.favouriteWrapper {
+    border: 1px solid transparent;
+    border-width: 1px 0;
+    transition: 0.25s all;
 }
 
 // Don't nest this as it is the root element of the injected HTML for tearout windows

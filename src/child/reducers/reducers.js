@@ -10,6 +10,7 @@ import {
     SEARCH_FINISHED,
     SEARCH_ERROR,
     TOGGLE_FAVOURITE,
+    INSERT_AT,
     FAV_CLICKED,
     UNSELECT,
     SELECTION
@@ -77,8 +78,22 @@ function search(state = { term: '' }, action) {
 function favourites(state = [], action) {
     let newState;
     let index;
+    let currentIndex;
 
     switch (action.type) {
+    case INSERT_AT:
+        newState = [...state];
+        currentIndex = state.indexOf(action.code);
+        if (currentIndex >= 0) {
+            newState.splice(currentIndex, 1);
+        }
+        index = action.index;
+        if (index >= 0) {
+            newState.splice(index, 0, action.code);
+        } else {
+            newState.push(action.code);
+        }
+        return newState;
     case TOGGLE_FAVOURITE:
         index = state.indexOf(action.code);
         newState = [...state];

@@ -2,19 +2,53 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { selectStock, unselectStock, toggleFavourite } from '../../../actions/sidebar';
+import { selectStock, unselectStock, toggleFavourite, insertAt } from '../../../actions/sidebar';
 import favTabImage from '../../../assets/png/favourites_tab.png';
 import Favourite from '../../../components/Favourite.js';
 
 class Favourites extends Component {
     constructor(props) {
         super(props);
-        this.onDrag = this.onDrag.bind(this);
         this.onClick = this.onClick.bind(this);
         this.toggleFavourite = this.toggleFavourite.bind(this);
     }
 
     componentDidMount() {
+        const dropTarget = document.getElementById('favDropTarget');
+
+        dropTarget.addEventListener('drop', e => {
+            const favs = this.props.favourites;
+            const code = e.dataTransfer.getData('text/plain');
+            this.props.dispatch(insertAt(favs.indexOf(e.targetCode), code));
+            dropTarget.classList.remove('dragOver');
+        }, false);
+
+        dropTarget.addEventListener('dragover', e => {
+            if (e.preventDefault) {
+                e.preventDefault();
+                // e.stopPropagation();
+            }
+            // e.stopPropagation();
+            try {
+                e.returnValue = false;
+            } catch (ex) {
+                    // do nothing
+            }
+        }, false);
+
+        dropTarget.addEventListener('dragenter', () => {
+            // check if cursor is halfway over the drop target
+                // if true, highlight border above
+                // if false, highlight border bellow
+
+            dropTarget.classList.add('dragOver');
+
+        }, false);
+
+        dropTarget.addEventListener('dragleave', () => {
+            dropTarget.classList.remove('dragOver');
+        }, false);
+
         const scrollPadding = 'scroll-padding';
         const el = this.refs.scrollarea;
         $(this.refs.scrollarea).mCustomScrollbar({
@@ -37,10 +71,6 @@ class Favourites extends Component {
         this.props.dispatch(selectStock(stockCode, stockName));
     }
 
-    onDrag() {
-        // TODO: send content to tearout
-    }
-
     toggleFavourite(stockCode) {
         this.props.dispatch(toggleFavourite(stockCode));
         if (this.props.selection.code === stockCode) {
@@ -52,11 +82,10 @@ class Favourites extends Component {
         const { favourites, hasErrors, isStarting, selection } = this.props;
         let bindings = {
             onClick: this.onClick,
-            onIconClick: this.toggleFavourite,
-            onDrag: this.onDrag
+            onIconClick: this.toggleFavourite
         };
         return (
-            <div>
+            <div id="favDropTarget" className="favDropTarget" >
                 <div className="sidetab-top">
                     <img src={favTabImage} className="top-icon" title="Favourites List" draggable="false" />
                 </div>

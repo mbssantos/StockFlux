@@ -8,6 +8,7 @@ export const FAV_CLICKED = 'FAV_CLICKED';
 export const TOGGLE_FAVOURITE = 'TOGGLE_FAVOURITE';
 export const SELECTION = 'SELECTION';
 export const UNSELECT = 'UNSELECT';
+export const INSERT_AT = 'INSERT_AT';
 
 import QuandlService from '../services/QuandlService.js';
 const quandlService = new QuandlService();
@@ -30,6 +31,14 @@ export function selectStock(code, name) {
 export function unselectStock() {
     return {
         type: UNSELECT
+    };
+}
+
+export function insertAt(index, code) {
+    return {
+        type: INSERT_AT,
+        index,
+        code
     };
 }
 

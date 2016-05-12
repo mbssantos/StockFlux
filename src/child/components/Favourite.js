@@ -8,7 +8,6 @@ const quandlService = new QuandlService();
 import arrowUp from '../assets/png/arrow_up.png';
 import arrowDown from '../assets/png/arrow_down.png';
 
-
 class Favourite extends Component {
 
     constructor(props) {
@@ -18,6 +17,7 @@ class Favourite extends Component {
 
     componentDidMount() {
         const stockCode = this.props.stockCode;
+
         quandlService.getStockData(stockCode, response => {
             const data = response.stockData.data[0];
             const stockData = {
@@ -29,6 +29,54 @@ class Favourite extends Component {
             const chartData = response;
             this.setState({ stockData, chartData });
         });
+
+        const dragTarget = document.getElementById(`stock_${stockCode}`);
+
+        dragTarget.addEventListener('dragstart', e => {
+            dragTarget.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', stockCode);
+        }, false);
+
+        dragTarget.addEventListener('dragover', e => {
+            // console.log(dragTarget);
+            // console.log('Fav dragover ', e.target);
+            if (e.preventDefault) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            try {
+                e.returnValue = false;
+            } catch (ex) {
+                    // do nothing
+            }
+        }, false);
+
+        dragTarget.addEventListener('dragenter', () => {
+            dragTarget.classList.add('dragOver');
+
+        });
+
+        dragTarget.addEventListener('dragleave', () => {
+            dragTarget.classList.remove('dragOver');
+        }, false);
+
+        dragTarget.addEventListener('drop', e => {
+            e.targetCode = stockCode;
+            dragTarget.classList.remove('dragOver');
+        }, false);
+
+        dragTarget.addEventListener('dragend', e => {
+            // If the dropEffect property has the value none during a dragend,
+            // then the drag was cancelled
+            dragTarget.classList.remove('dragging');
+
+            console.log(e.dataTransfer.dropEffect);
+
+            if (e.dataTransfer.dropEffect === 'none') {
+                // TODO: Open window with stock
+                this.props.bindings.onIconClick(stockCode);
+            }
+        }, false);
     }
 
     onIconClick(e) {
@@ -52,7 +100,7 @@ class Favourite extends Component {
         const name = stockData.name ? truncate(stockData.name) : '';
 
         return (
-            <div>
+            <div draggable="true" id={`stock_${stockCode}`} className="favouriteWrapper">
                 <div className="drop-target">
                     <div className={`darkens favourite tearable ${cls}`} onClick={() => bindings.onClick(stockCode, name)} ng-dblclick="doubleClick(stock)" draggable="false">
                         <div className="top">
@@ -75,7 +123,7 @@ class Favourite extends Component {
                 </div>
                 <div className="hover-area"></div>
             </div>
-            );
+        );
     }
 }
 

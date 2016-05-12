@@ -25,7 +25,7 @@ class ConfigService {
         const sharedConfig = {
             name: name || this.createName(),
             contextMenu: allowContextMenu,
-            autoShow: false,
+            autoShow: true,
             frame: false,
             shadow: false,
             resizeRegion: {
