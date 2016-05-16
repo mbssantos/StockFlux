@@ -13,7 +13,9 @@ import {
     INSERT_AT,
     FAV_CLICKED,
     UNSELECT,
-    SELECTION
+    SELECTION,
+    DRAG_OVER_FAVOURITE,
+    DROP_OVER_FAVOURITE
 } from '../actions/sidebar.js';
 import deepFreeze from 'deep-freeze';
 
@@ -75,34 +77,39 @@ function search(state = { term: '' }, action) {
 }
 
 // state is an array of codes
-function favourites(state = [], action) {
-    let newState;
+function favourites(state = { codes: [], move: {} }, action) {
+    let codes;
     let index;
     let currentIndex;
 
     switch (action.type) {
     case INSERT_AT:
-        newState = [...state];
-        currentIndex = state.indexOf(action.code);
+    case TOGGLE_FAVOURITE:
+        codes = [...state.codes];
+        index = codes.indexOf(action.code);
+        if (index >= 0) {
+            codes.splice(index, 1);
+        } else {
+            codes.push(action.code);
+        }
+        return Object.assign({}, state, { codes });
+    case DRAG_OVER_FAVOURITE:
+        return Object.assign({}, state, {
+            move: { code: action.code, index: action.index }
+        });
+    case DROP_OVER_FAVOURITE:
+        codes = [...state.codes];
+        currentIndex = codes.indexOf(action.code);
         if (currentIndex >= 0) {
-            newState.splice(currentIndex, 1);
+            codes.splice(currentIndex, 1);
         }
         index = action.index;
         if (index >= 0) {
-            newState.splice(index, 0, action.code);
+            codes.splice(index, 0, action.code);
         } else {
-            newState.push(action.code);
+            codes.push(action.code);
         }
-        return newState;
-    case TOGGLE_FAVOURITE:
-        index = state.indexOf(action.code);
-        newState = [...state];
-        if (index >= 0) {
-            newState.splice(index, 1);
-        } else {
-            newState.push(action.code);
-        }
-        return newState;
+        return Object.assign({}, state, { codes, move: {} });
     default:
         return state;
     }

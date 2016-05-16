@@ -2,53 +2,32 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { selectStock, unselectStock, toggleFavourite, insertAt } from '../../../actions/sidebar';
+import { selectStock, unselectStock, toggleFavourite, dragOverFavourite, dropOverFavourite } from '../../../actions/sidebar';
 import favTabImage from '../../../assets/png/favourites_tab.png';
 import Favourite from '../../../components/Favourite.js';
+
+function getCodeFromDT(types) {
+    for (let i = 0; i < types.length; i++) {
+        if (types[i] !== 'text/plain') {
+            return (types[i]).toUpperCase();
+        }
+    }
+}
 
 class Favourites extends Component {
     constructor(props) {
         super(props);
+
         this.onClick = this.onClick.bind(this);
         this.toggleFavourite = this.toggleFavourite.bind(this);
+
+        this.onDragOverFavourite = this.onDragOverFavourite.bind(this);
+        this.onDropOverFavourite = this.onDropOverFavourite.bind(this);
     }
 
     componentDidMount() {
-        const dropTarget = document.getElementById('favDropTarget');
-
-        dropTarget.addEventListener('drop', e => {
-            const favs = this.props.favourites;
-            const code = e.dataTransfer.getData('text/plain');
-            this.props.dispatch(insertAt(favs.indexOf(e.targetCode), code));
-            dropTarget.classList.remove('dragOver');
-        }, false);
-
-        dropTarget.addEventListener('dragover', e => {
-            if (e.preventDefault) {
-                e.preventDefault();
-                // e.stopPropagation();
-            }
-            // e.stopPropagation();
-            try {
-                e.returnValue = false;
-            } catch (ex) {
-                    // do nothing
-            }
-        }, false);
-
-        dropTarget.addEventListener('dragenter', () => {
-            // check if cursor is halfway over the drop target
-                // if true, highlight border above
-                // if false, highlight border bellow
-
-            dropTarget.classList.add('dragOver');
-
-        }, false);
-
-        dropTarget.addEventListener('dragleave', () => {
-            dropTarget.classList.remove('dragOver');
-        }, false);
-
+        this.addDropTarget('favDropTarget');
+        // this.props.favourites.codes.forEach(favourite => this.addDragTarget(favourite));
         const scrollPadding = 'scroll-padding';
         const el = this.refs.scrollarea;
         $(this.refs.scrollarea).mCustomScrollbar({
@@ -71,6 +50,68 @@ class Favourites extends Component {
         this.props.dispatch(selectStock(stockCode, stockName));
     }
 
+    onDragOverFavourite(e, targetCode) {
+        const codes = this.props.favourites.codes;
+        const code = getCodeFromDT(e.dataTransfer.types);
+        const move = this.props.favourites.move;
+        const index = codes.indexOf(targetCode);
+
+        const indexOfCode = codes.indexOf(code);
+        if (indexOfCode <= -1 ||
+            targetCode !== code &&
+             indexOfCode !== index &&
+              indexOfCode + 1 !== index) {
+            e.target.classList.add('dragOver');
+        }
+
+        if (move.index !== index || targetCode !== code) {
+            // this.props.dispatch(dragOverFavourite(index, code));
+        }
+        e.stopPropagation();
+    }
+
+    // when dropped over fav
+    onDropOverFavourite(e, targetCode) {
+        const codes = this.props.favourites.codes;
+        // const code = e.dataTransfer.getData('text/plain');
+        const code = getCodeFromDT(e.dataTransfer.types);
+        this.props.dispatch(dropOverFavourite(codes.indexOf(targetCode), code));
+        e.target.classList.remove('dragOver');
+        e.stopPropagation();
+    }
+
+    addDropTarget(id) {
+        const dropTarget = document.getElementById(id);
+        this.dropTarget = dropTarget;
+
+        dropTarget.addEventListener('drop', e => {
+            const codes = this.props.favourites.codes;
+            // const code = e.dataTransfer.getData('text/plain');
+            const code = getCodeFromDT(e.dataTransfer.types);
+            // TODO: change this to inser at position
+            this.props.dispatch(dropOverFavourite(codes.indexOf(e.targetCode), code));
+            dropTarget.classList.remove('dragOver');
+        }, false);
+
+        dropTarget.addEventListener('dragover', e => {
+            if (!dropTarget.classList.contains('dragOver')) {
+                dropTarget.classList.add('dragOver');
+            }
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            try {
+                e.returnValue = false;
+            } catch (ex) {
+                // do nothing
+            }
+        }, false);
+
+        dropTarget.addEventListener('dragleave', () => {
+            dropTarget.classList.remove('dragOver');
+        }, false);
+    }
+
     toggleFavourite(stockCode) {
         this.props.dispatch(toggleFavourite(stockCode));
         if (this.props.selection.code === stockCode) {
@@ -80,7 +121,12 @@ class Favourites extends Component {
 
     render() {
         const { favourites, hasErrors, isStarting, selection } = this.props;
+        const codes = favourites.codes;
         let bindings = {
+            dnd: {
+                onDragEnter: this.onDragOverFavourite,
+                onDrop: this.onDropOverFavourite
+            },
             onClick: this.onClick,
             onIconClick: this.toggleFavourite
         };
@@ -100,13 +146,14 @@ class Favourites extends Component {
                             An error occurred while retrieving data. Please check your internet connection or wait for our data services to be re-established.
                         </div>
                         }
-                        {!hasErrors && favourites.length === 0 && <div className="no-favourites">
+                        {!hasErrors && codes.length === 0 && <div className="no-favourites">
                             <p>You have no favourites to display.</p>
                             <p>Use the search tab to add new stocks to the list.</p>
                         </div>
                         }
-                        {favourites && favourites.length > 0 && (favourites || []).map(stockCode =>
-                            <Favourite key={stockCode} stockCode={stockCode} bindings={bindings} selected={stockCode === selection.code} isFavourite={favourites.indexOf(stockCode) >= 0} />)}
+                        {codes.map(stockCode =>
+                            <Favourite key={stockCode} stockCode={stockCode} bindings={bindings} selected={stockCode === selection.code} isFavourite={codes.indexOf(stockCode) >= 0} />
+                        )}
                     </div>
                 </div>
             </div>
@@ -115,7 +162,7 @@ class Favourites extends Component {
 }
 Favourites.propTypes = {
     selection: PropTypes.object,
-    favourites: PropTypes.array,
+    favourites: PropTypes.object,
     hasErrors: PropTypes.bool,
     isStarting: PropTypes.bool,
     dispatch: PropTypes.func.isRequired

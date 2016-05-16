@@ -8,7 +8,8 @@ export const FAV_CLICKED = 'FAV_CLICKED';
 export const TOGGLE_FAVOURITE = 'TOGGLE_FAVOURITE';
 export const SELECTION = 'SELECTION';
 export const UNSELECT = 'UNSELECT';
-export const INSERT_AT = 'INSERT_AT';
+export const DRAG_OVER_FAVOURITE = 'DRAG_OVER_FAVOURITE';
+export const DROP_OVER_FAVOURITE = 'DROP_OVER_FAVOURITE';
 
 import QuandlService from '../services/QuandlService.js';
 const quandlService = new QuandlService();
@@ -34,9 +35,17 @@ export function unselectStock() {
     };
 }
 
-export function insertAt(index, code) {
+export function dragOverFavourite(index, code) {
     return {
-        type: INSERT_AT,
+        type: DRAG_OVER_FAVOURITE,
+        index,
+        code
+    };
+}
+
+export function dropOverFavourite(index, code) {
+    return {
+        type: DROP_OVER_FAVOURITE,
         index,
         code
     };
@@ -69,6 +78,7 @@ export function searchFinished(term, results) {
         results
     };
 }
+
 export function searchError() {
     return {
         type: SEARCH_ERROR
